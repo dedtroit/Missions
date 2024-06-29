@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .infoheader {
+            font-size: 40px;
+            /* Header font size */
+            margin-bottom: 20px;
+            /* Space below the header */
+            margin-top: 10%;
+            color: #f6f6f7;
+            /* Darker color for the header */
+        }
+
+        .answer a {
+            text-decoration: none;
+            color: #f6f6f7
+        }
+
+        .answer a:hover {
+            text-decoration: underline;
+            color: #f6f6f7
+        }
+
+        .info {
+            font-size: 15px;
+            /* Info font size */
+            margin-bottom: 30px;
+            /* Increased space below each paragraph */
+            padding: 15px;
+            /* Add padding for better spacing */
+            border-radius: 5px;
+            /* Rounded corners for a smoother look */
+            color: #f6f6f7;
+            /* Slightly lighter color for the text */
+            line-height: 1.8;
+            /* Increase line spacing */
+            max-height: 60px;
+            /* Set a max height for the info block */
+            overflow: hidden;
+            /* Hide overflow */
+            transition: max-height 0.3s ease;
+            /* Smooth transition for height change */
+        }
+
+        .info.open {
+            max-height: 1000px;
+            /* Expand max height to show all content */
+        }
+
+        .toggle-btn {
+            cursor: pointer;
+            color: #f6f6f7;
+            /* Blue color for the toggle button */
+            margin-top: 10px;
+            /* Space above the button */
+        }
+
+        .toggle-btn:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
+
+        .qa {
+            margin-top: 10px;
+            /* Space above the Q&A section */
+        }
+
+        .question {
+            font-weight: bold;
+            /* Bold font for questions */
+            margin-bottom: 10px;
+            /* Space below each question */
+        }
+
+        .answer {
+            margin-bottom: 20px;
+            /* Space below each answer */
+        }
+
+        .contact a {
+            color: white;
+            text-decoration: none;
+            /* Remove inheritance and explicitly set to none */
+        }
+
+        .contact a:hover {
+            cursor: pointer;
+            text-decoration: underline;
+            /* Underline links on hover */
+        }
+
+        blockquote {
+            font-style: italic;
+            /* Italicize blockquotes */
+            background-color: #ecf0f1;
+            /* Light background for blockquotes */
+            padding: 10px 20px;
+            /* Padding for blockquotes */
+            border-left: 5px solid #3498db;
+            /* Left border for blockquotes */
+            margin: 20px 0;
+            /* Margin around blockquotes */
+        }
+
+        body {
+            margin: 0;
+            /* Remove or adjust overflow property to allow scrolling */
+            /* overflow: hidden; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            font-size: 3rem;
+            font-family: 'Akkurat', sans-serif;
+        }
+
+
+        .loading-text {
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            /* Animation to fade in text */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            /* Ensure the text is on top of the video */
+            font-family: 'Akkurat', sans-serif;
+
+        }
+
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Ensure the video is behind the text */
+            font-family: 'Akkurat', sans-serif;
+
+        }
+
+        #loadingVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .content {
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .attention {
+            padding-top: 50px;
+            font-size: 20rem;
+            line-height: 15rem;
+        }
+
+        .contact {
+            margin-top: 20px;
+            z-index: 5;
+            padding-bottom: 40px;
+            display: flex;
+            flex-direction: row;
+            font-family: 'Akkurat', sans-serif;
+            text-transform: capitalize;
+        }
+
+        .personal {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-right: 80px;
+            font-size: 15px;
+
+        }
+
+        .cta {
+            font-size: 30px;
+        }
+
+        .contact a {
+            color: white;
+            text-decoration: inherit;
+        }
+
+        @media only screen and (max-width: 2000px) {
+            .attention {
+                font-size: 14rem;
+                line-height: 11rem;
+            }
+        }
+
+        @media only screen and (max-width: 1300px) {
+            .attention {
+                font-size: 12rem;
+                line-height: 10rem;
+            }
+        }
+
+        @media only screen and (max-width: 1100px) {
+            .attention {
+                font-size: 10rem;
+                line-height: 8rem;
+            }
+        }
+
+        @media only screen and (max-width: 950px) {
+            .attention {
+                font-size: 8rem;
+                line-height: 6.5rem;
+            }
+        }
+
+        @media only screen and (max-width: 750px) {
+            .attention {
+                font-size: 6rem;
+                line-height: 4rem;
+            }
+        }
+
+        @media only screen and (max-width: 575px) {
+            .attention {
+                padding-top: 150px;
+                font-size: 5rem;
+                line-height: 4rem;
+            }
+
+            .contact {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media only screen and (max-width: 450px) {
+            .attention {
+                padding-top: 130px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loadingScreen">
+        <video id="loadingVideo" autoplay muted>
+            <source src="HIMALAYAS.mp4" type="video/mp4">
+            <!-- Add more <source> elements for other video formats -->
+            Your browser does not support the video tag.
+        </video>
+        <div class="loading-text">Welcome to the Himalayas</div>
+    </div>
+
+
+    <div id="mainContent" style="display: none;">
+        <div class="content">
+
+            <div class="attention">
+                <img class="line" src="" />Himalayas <br> Missions <br> Trip
+            </div>
+
+            <div style="display: flex; margin-top: 50px;">
+                <div>
+                    <form action="https://www.paypal.com/pools/c/95NPiGarbZ" method="get" target="_blank">
+                        <button type="submit"
+                            style=" margin-right: 40px; padding: 20px 100px; font-size: 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Donate Now
+                        </button>
+                    </form>
+                </div>
+                <div>
+                    <form
+                        action="https://docs.google.com/spreadsheets/d/1UGe5HXP3plKnZuz-kOWPG2r807NLF-hUw8wCj1fj8JU/edit?usp=sharing"
+                        method="get" target="_blank">
+                        <button type="submit"
+                            style="padding: 20px 100px; font-size: 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Join Prayer List
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="contact">
+                <div class="personal">
+                    <div class="infoheader">WHAT ARE YOU FUNDING?</div>
+                    <div class="info" id="infoText">
+                        3.2 billion people in the <a
+                            href="https://advancingnativemissions.com/what-is-the-10-40-window-and-why-is-it-important/"
+                            target="_blank">10/40 window</a> are part of unreached people groups, making up 97% of the
+                        world’s unreached population. Shockingly, only 3% of missionaries and 1% of mission funding are
+                        dedicated to reaching these groups. We are missing the opportunity to share the love of Jesus
+                        with a
+                        vast number of people who have never heard His name. This needs to change.<br><br>
+
+                        It begins with Kurdistan… Yes, this mission trip is for the Himalayas, but our journey starts
+                        here.<br><br>
+
+                        I had the incredible opportunity to witness people being healed and saved. These weren't just
+                        small,
+                        internal healings that made people happy. I saw people healed from cancer, lifelong pain, and
+                        blindness—miracles that only Jesus can perform. I was part of this medical trip to document
+                        these
+                        miraculous events and the stories of people finding salvation in Jesus.<br><br>
+
+                        My role was to capture these moments on film and share the good news, showing that Jesus’s work
+                        is
+                        far from finished. He is continuing what He started.<br><br>
+
+                        I share this with you to highlight the importance of the mission Jesus has begun and the role He
+                        has
+                        called me to play. I will be venturing into the Himalayan mountains, where people have never
+                        heard
+                        the name of Jesus. They worship nature, choosing a new "god" each day or until they decide to
+                        switch.<br><br>
+
+                        We will offer them hope in the One who will never fail them.<br><br>
+
+                        From September 16th to 30th, I, along with 17 others, will journey to the eastern and central
+                        regions of Nepal. Some of us will provide medical treatment and pray over the people, while
+                        others
+                        will travel into the mountains to minister to the villagers.<br><br>
+
+                        I am raising $3,000 for travel expenses and seeking your support to reach these people, breaking
+                        the
+                        statistic that only 3% of missionaries go to share the love of Jesus that make up 65% of the
+                        world’s
+                        population.<br><br>
+
+                        If you can’t support financially, I ask for your prayers for our team and me as we embark on
+                        this
+                        mission.
+                    </div>
+                    <div class="toggle-btn" onclick="toggleInfo()">Show More</div>
+                </div>
+            </div>
+
+            <div class="qa">
+                <div class="personal">
+                    <div class="infoheader">Q&A</div>
+                    <div class="question">
+                        Q: How can I support your mission trip?
+                    </div>
+                    <div class="answer">
+                        A: You can support us financially by contributing to our travel expenses. Every donation makes a
+                        difference in reaching the unreached in the Himalayas.
+                    </div>
+                    <div class="question">
+                        Q: How else can I help if I can't contribute financially?
+                    </div>
+                    <div class="answer">
+                        A: Your prayers are invaluable to us. Please pray for our safety, health, and effectiveness in
+                        sharing the love of Jesus during our mission.
+                    </div>
+                    <div class="question">
+                        Q: What organization are you going with?
+                    </div>
+                    <div class="answer">
+                        A: <a href="https://jesusculture.com">Jesus Culture</a> out in Sacramento, CA
+                    </div>
+                    <div class="question">
+                        Q: What will you do if the funding goes over?
+                    </div>
+                    <div class="answer">
+                        A: All additional funding will go towards backpacking gear.
+                    </div>
+                </div>
+            </div>
+            <div class="contact">
+                <div class="personal">
+                    <div class="cta">OTHER QUESTIONS?</div>
+                    <div class="email">
+                        <a href="mailto:DANNY@UNITEDPOSTHOUSE.COM"
+                            title="video editing email">DANNY@UNITEDPOSTHOUSE.COM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleInfo() {
+            var infoText = document.getElementById('infoText');
+            if (infoText.style.maxHeight) {
+                infoText.style.maxHeight = null;
+                document.querySelector('.toggle-btn').textContent = 'Show More';
+            } else {
+                infoText.style.maxHeight = infoText.scrollHeight + 'px';
+                document.querySelector('.toggle-btn').textContent = 'Show Less';
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            var loadingVideo = document.getElementById('loadingVideo');
+            var mainContent = document.getElementById('mainContent');
+
+            // Hide video and show main content when video ends
+            loadingVideo.addEventListener('ended', function () {
+                loadingVideo.style.display = 'none';
+                mainContent.style.display = 'flex'; // or 'block' depending on your layout
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Simulate loading delay (remove in production)
+            setTimeout(function () {
+                // Hide loading screen and show main content
+                var loadingScreen = document.getElementById('loadingScreen');
+                var mainContent = document.getElementById('mainContent');
+
+                loadingScreen.style.display = 'none';
+                mainContent.style.display = 'flex'; // or 'block' depending on your layout
+            }, 3000); // Adjust delay as needed (in milliseconds)
+        });
+    </script>
+</body>
+
+</html>
