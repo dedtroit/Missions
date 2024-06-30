@@ -8,6 +8,7 @@
     <style>
         body {
             background-color: #050505;
+            font-family: 'Akkurat', sans-serif;
         }
 
         /* Your CSS styles here */
@@ -26,6 +27,8 @@
             font-size: 25px;
             margin-bottom: 24px;
             color: #f6f6f7;
+            font-family: 'Akkurat', sans-serif;
+
         }
 
         .answer-input {
@@ -38,11 +41,15 @@
             /* Adjust width as needed */
             box-sizing: border-box;
             transition: border-color 0.3s ease-in-out;
+            font-family: 'Akkurat', sans-serif;
+            background-color: #050505;
+            color: #f6f6f7
         }
 
         .answer-input:focus {
             outline: none;
             border-color: #050505;
+            color: #f6f6f7
         }
 
         .button-container {
@@ -52,7 +59,9 @@
         }
 
         .back-btn,
-        .next-btn {
+        .next-btn,
+        .donate-btn,
+        .home-btn {
             border-radius: 5px;
             background-color: #3498db;
             border: none;
@@ -61,16 +70,43 @@
             padding: 10px 20px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            font-family: 'Akkurat', sans-serif;
+
         }
 
         .back-btn:hover,
-        .next-btn:hover {
+        .next-btn:hover,
+        .donate-btn:hover,
+        .home-btn:hover {
             background-color: #57b8f9;
+        }
+
+        .thank-you-message {
+            text-align: center;
+            color: #f6f6f7;
+            font-family: 'Akkurat', sans-serif;
+
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media only screen and (max-width: 450px) {
+            .answer-input{
+                width: 300px;
+            }
+            .question-text{
+                font-size: 20px;
+            }
         }
     </style>
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function() {
+        (function () {
             emailjs.init('qym4Pa_0gSMhNz7Ab');
         })();
     </script>
@@ -111,9 +147,14 @@
                         <button class="next-btn" type="button" onclick="submitForm()">Complete</button>
                     </div>
                 </div>
+            </div>
 
-                <div class="question" id="thank-you" style="display: none;">
-                    <p class="question-text">Thank you for your submission!</p>
+            <div class="question thank-you" id="thank-you" style="display: none;">
+                <p class="thank-you-message">Thank you for your submission!</p>
+                <div class="button-group">
+                    <button class="donate-btn" type="button"
+                        onclick="location.href='http://www.paypal.com/pools/c/95NPiGarbZ'">Donate Now</button>
+                    <button class="home-btn" type="button" onclick="location.href='index.html'">Home</button>
                 </div>
             </div>
         </form>
@@ -165,11 +206,11 @@
             }
 
             emailjs.send('service_858g7wa', 'template_y3k3jm9', templateParams)
-                .then(function(response) {
+                .then(function (response) {
                     console.log('SUCCESS!', response.status, response.text);
                     document.getElementById("form-body").style.display = "none";
                     document.getElementById("thank-you").style.display = "block";
-                }, function(error) {
+                }, function (error) {
                     console.error('FAILED...', error);
                     alert('Error submitting form. Please try again later.');
                 });
