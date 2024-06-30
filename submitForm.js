@@ -16,7 +16,7 @@ exports.handler = async (event) => {
     const response = await fetch(notionEndpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer YOUR_NOTION_API_TOKEN`, // Replace with your Notion API token
+        'Authorization': `Bearer ${process.env.NOTION_API_TOKEN}`, // Replace with your Notion API token
         'Content-Type': 'application/json',
         'Notion-Version': '2022-06-13', // Update with the latest Notion API version
       },
