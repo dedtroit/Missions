@@ -5,6 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        .button-container {
+            display: flex;
+            justify-content:space-between;
+            /* Aligns buttons side by side */
+            margin-top: 50px;
+        }
+
+        .button-container>div {
+            flex: 1;
+            /* Each button container takes equal space */
+            padding: 10px;
+        }
+
+        .button-style {
+            padding: 20px 100px;
+            font-size: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
         .infoheader {
             font-size: 40px;
             /* Header font size */
@@ -239,6 +263,7 @@
                 font-size: 6rem;
                 line-height: 4rem;
             }
+
         }
 
         @media only screen and (max-width: 575px) {
@@ -252,11 +277,60 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            button {
+                font-size: 10px;
+            }
         }
 
         @media only screen and (max-width: 450px) {
             .attention {
-                padding-top: 130px;
+                padding-top: 50px;
+                /* Adjusted line height */
+                font-size: 4rem;
+                line-height: 4rem;
+            }
+
+            .content {
+                padding: 0 10px;
+                /* Adjusted padding for content */
+            }
+
+            .contact {
+                flex-direction: column;
+                /* Stack contact elements */
+                align-items: center;
+                /* Center align items */
+            
+                /* Center align text */
+                font-size: 12px;
+                /* Adjusted font size */
+                margin-top: 10px;
+                /* Adjusted margin */
+            }
+
+            .personal {
+                margin-right: 0;
+                /* Remove right margin */
+                margin-bottom: 10px;
+                /* Adjusted margin */
+            }
+
+            .cta {
+                font-size: 20px;
+                /* Adjusted font size */
+            }
+
+            .button-container {
+                flex-direction: column;
+                /* Stacks buttons vertically */
+                align-items: center;
+                /* Centers buttons vertically */
+            }
+
+            .button-container>div {
+                margin-bottom: 10px;
+                /* Space between stacked buttons */
             }
         }
     </style>
@@ -280,11 +354,10 @@
                 <img class="line" src="" />Himalayas <br> Missions <br> Trip
             </div>
 
-            <div style="display: flex; margin-top: 50px;">
+            <div class="button-container">
                 <div>
                     <form action="https://www.paypal.com/pools/c/95NPiGarbZ" method="get" target="_blank">
-                        <button type="submit"
-                            style=" margin-right: 40px; padding: 20px 100px; font-size: 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <button type="submit" class="button-style">
                             Donate Now
                         </button>
                     </form>
@@ -293,13 +366,13 @@
                     <form
                         action="https://docs.google.com/spreadsheets/d/1UGe5HXP3plKnZuz-kOWPG2r807NLF-hUw8wCj1fj8JU/edit?usp=sharing"
                         method="get" target="_blank">
-                        <button type="submit"
-                            style="padding: 20px 100px; font-size: 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <button type="submit" class="button-style">
                             Join Prayer List
                         </button>
                     </form>
                 </div>
             </div>
+
 
             <div class="contact">
                 <div class="personal">
