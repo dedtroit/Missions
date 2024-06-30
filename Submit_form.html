@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Form</title>
+    <style>
+        body {
+            background-color: #050505;
+        }
+
+        /* Your CSS styles here */
+        .form-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .question {
+            margin-bottom: 48px;
+        }
+
+        .question-text {
+            font-size: 25px;
+            margin-bottom: 24px;
+            color: #f6f6f7;
+        }
+
+        .answer-input {
+            border: none;
+            border-bottom: 2px solid #ccc;
+            font-size: 18px;
+            padding: 12px 10px;
+            margin-bottom: 32px;
+            width: 400px;
+            /* Adjust width as needed */
+            box-sizing: border-box;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #050505;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .back-btn,
+        .next-btn {
+            border-radius: 5px;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover,
+        .next-btn:hover {
+            background-color: #57b8f9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <div id="form-body">
+            <div class="question">
+                <div class="question-wrapper">
+                    <p class="question-text">What is your First Name?</p>
+                    <input type="text" class="answer-input" id="answer1">
+                </div>
+                <div class="button-container">
+                    <button class="next-btn" onclick="handleNextQuestion()">Next</button>
+                </div>
+            </div>
+            <div class="question" style="display: none;">
+                <div class="question-wrapper">
+                    <p class="question-text">What is your Last Name?</p>
+                    <input type="text" class="answer-input" id="answer2">
+                </div>
+                <div class="button-container">
+                    <button class="back-btn" onclick="handlePreviousQuestion()">Back</button>
+                    <button class="next-btn" onclick="handleNextQuestion()">Next</button>
+                </div>
+            </div>
+
+            <div class="question" style="display: none;">
+                <div class="question-wrapper">
+                    <p class="question-text">What's your email address?</p>
+                    <input type="email" class="answer-input" id="answer3">
+                    <p class="error-message" style="display: none;">Please enter a valid email address</p>
+                </div>
+                <div class="button-container">
+                    <button class="back-btn" onclick="handlePreviousQuestion()">Back</button>
+                    <button class="next-btn" onclick="submitForm()">Complete</button>
+                </div>
+            </div>
+
+            <div class="question" id="thank-you" style="display: none;">
+                <p class="question-text">Thank you for your submission!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+
+        function handleNextQuestion() {
+            const currentQuestion = document.getElementsByClassName("question")[currentQuestionIndex];
+            const currentAnswer = document.getElementById(`answer${currentQuestionIndex + 1}`).value.trim();
+
+            if (!currentAnswer) {
+                alert("Please fill out the answer.");
+                return;
+            }
+
+            currentQuestion.style.display = "none";
+
+            if (currentQuestionIndex < 3) { // Adjust this number based on the number of questions
+                currentQuestionIndex++;
+                document.getElementsByClassName("question")[currentQuestionIndex].style.display = "block";
+            } else {
+                document.getElementById("form-body").style.display = "none";
+                document.getElementById("thank-you").style.display = "block";
+                submitForm();
+            }
+        }
+
+        function handlePreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                document.getElementsByClassName("question")[currentQuestionIndex].style.display = "none";
+                currentQuestionIndex--;
+                document.getElementsByClassName("question")[currentQuestionIndex].style.display = "block";
+            }
+        }
+
+        function submitForm() {
+            const databaseId = 'ba11163b1dea48b7a8add9b0a39bc9d6'; // Replace with your Notion database ID
+
+            const data = {
+                name: document.getElementById('answer1').value.trim(),
+                lastName: document.getElementById('answer2').value.trim(),
+                email: document.getElementById('answer3').value.trim()
+                // Add more fields as needed
+            };
+
+            // Ensure data is valid before proceeding
+            if (!data.name || !data.lastName || !data.email) {
+                console.error('Please fill out all fields.');
+                return;
+            }
+
+            fetch("/.netlify/functions/submitForm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Form submitted successfully:", data);
+                    document.getElementById("form-body").style.display = "none";
+                    document.getElementById("thank-you").style.display = "block";
+                })
+                .catch(error => {
+                    console.error("Error submitting form:", error);
+                    alert('Error submitting form. Please try again later.');
+                });
+        }
+    </script>
+</body>
+
+</html>
