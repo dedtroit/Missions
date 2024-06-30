@@ -68,47 +68,55 @@
             background-color: #57b8f9;
         }
     </style>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init('YOUR_USER_ID');
+        })();
+    </script>
 </head>
 
 <body>
     <div class="form-container">
-        <div id="form-body">
-            <div class="question">
-                <div class="question-wrapper">
-                    <p class="question-text">What is your First Name?</p>
-                    <input type="text" class="answer-input" id="answer1">
+        <form id="simple-form">
+            <div id="form-body">
+                <div class="question">
+                    <div class="question-wrapper">
+                        <p class="question-text">What is your First Name?</p>
+                        <input type="text" class="answer-input" id="answer1" name="firstName">
+                    </div>
+                    <div class="button-container">
+                        <button class="next-btn" type="button" onclick="handleNextQuestion()">Next</button>
+                    </div>
                 </div>
-                <div class="button-container">
-                    <button class="next-btn" onclick="handleNextQuestion()">Next</button>
+                <div class="question" style="display: none;">
+                    <div class="question-wrapper">
+                        <p class="question-text">What is your Last Name?</p>
+                        <input type="text" class="answer-input" id="answer2" name="lastName">
+                    </div>
+                    <div class="button-container">
+                        <button class="back-btn" type="button" onclick="handlePreviousQuestion()">Back</button>
+                        <button class="next-btn" type="button" onclick="handleNextQuestion()">Next</button>
+                    </div>
                 </div>
-            </div>
-            <div class="question" style="display: none;">
-                <div class="question-wrapper">
-                    <p class="question-text">What is your Last Name?</p>
-                    <input type="text" class="answer-input" id="answer2">
-                </div>
-                <div class="button-container">
-                    <button class="back-btn" onclick="handlePreviousQuestion()">Back</button>
-                    <button class="next-btn" onclick="handleNextQuestion()">Next</button>
-                </div>
-            </div>
 
-            <div class="question" style="display: none;">
-                <div class="question-wrapper">
-                    <p class="question-text">What's your email address?</p>
-                    <input type="email" class="answer-input" id="answer3">
-                    <p class="error-message" style="display: none;">Please enter a valid email address</p>
+                <div class="question" style="display: none;">
+                    <div class="question-wrapper">
+                        <p class="question-text">What's your email address?</p>
+                        <input type="email" class="answer-input" id="answer3" name="email">
+                        <p class="error-message" style="display: none;">Please enter a valid email address</p>
+                    </div>
+                    <div class="button-container">
+                        <button class="back-btn" type="button" onclick="handlePreviousQuestion()">Back</button>
+                        <button class="next-btn" type="button" onclick="submitForm()">Complete</button>
+                    </div>
                 </div>
-                <div class="button-container">
-                    <button class="back-btn" onclick="handlePreviousQuestion()">Back</button>
-                    <button class="next-btn" onclick="submitForm()">Complete</button>
-                </div>
-            </div>
 
-            <div class="question" id="thank-you" style="display: none;">
-                <p class="question-text">Thank you for your submission!</p>
+                <div class="question" id="thank-you" style="display: none;">
+                    <p class="question-text">Thank you for your submission!</p>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <script>
@@ -125,7 +133,7 @@
 
             currentQuestion.style.display = "none";
 
-            if (currentQuestionIndex < 3) { // Adjust this number based on the number of questions
+            if (currentQuestionIndex < 2) { // Adjust this number based on the number of questions
                 currentQuestionIndex++;
                 document.getElementsByClassName("question")[currentQuestionIndex].style.display = "block";
             } else {
@@ -144,41 +152,25 @@
         }
 
         function submitForm() {
-            const databaseId = 'ba11163b1dea48b7a8add9b0a39bc9d6'; // Replace with your Notion database ID
-
-            const data = {
-                name: document.getElementById('answer1').value.trim(),
+            const templateParams = {
+                firstName: document.getElementById('answer1').value.trim(),
                 lastName: document.getElementById('answer2').value.trim(),
                 email: document.getElementById('answer3').value.trim()
-                // Add more fields as needed
             };
 
             // Ensure data is valid before proceeding
-            if (!data.name || !data.lastName || !data.email) {
+            if (!templateParams.firstName || !templateParams.lastName || !templateParams.email) {
                 console.error('Please fill out all fields.');
                 return;
             }
 
-            fetch("/.netlify/functions/submitForm", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Form submitted successfully:", data);
+            emailjs.send('service_858g7wa', 'template_y3k3jm9', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
                     document.getElementById("form-body").style.display = "none";
                     document.getElementById("thank-you").style.display = "block";
-                })
-                .catch(error => {
-                    console.error("Error submitting form:", error);
+                }, function(error) {
+                    console.error('FAILED...', error);
                     alert('Error submitting form. Please try again later.');
                 });
         }
